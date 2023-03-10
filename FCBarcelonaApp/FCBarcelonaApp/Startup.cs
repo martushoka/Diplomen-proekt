@@ -1,6 +1,8 @@
+using FCBarcelonaApp.Abstraction;
 using FCBarcelonaApp.Data;
 using FCBarcelonaApp.Domain;
 using FCBarcelonaApp.Infrastructure;
+using FCBarcelonaApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -41,6 +43,9 @@ namespace FCBarcelonaApp
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
+
+            services.AddTransient<IMyTeamService, MyTeamService>();
+            services.AddTransient<ITeamService, TeamService>();
 
             services.AddRazorPages();
             services.Configure<IdentityOptions>(option =>

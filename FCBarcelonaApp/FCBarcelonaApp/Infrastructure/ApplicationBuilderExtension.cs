@@ -21,7 +21,13 @@ namespace FCBarcelonaApp.Infrastructure
             await RoleSeeder(services);
             await SeedAdministrator(services);
 
-            
+            var dataMyTeam = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            SeedMyTeams(dataMyTeam);
+
+            var dataTeam = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            SeedTeams(dataTeam);
+
+
             return app;
         }
 
@@ -67,6 +73,40 @@ namespace FCBarcelonaApp.Infrastructure
             }
         }
 
-        
+        private static void SeedMyTeams(ApplicationDbContext dataMyTeam)
+        {
+            if (dataMyTeam.MyTeams.Any())
+            {
+                return;
+            }
+            dataMyTeam.MyTeams.AddRange(new[]
+            {
+                //new MyTeam {TeamName="Barcelona",Picture="https://www.pngitem.com/pimgs/m/83-830746_fc-barcelona-old-logo-hd-png-download.png" }
+                new MyTeam {MyTeamName="Barcelona",Picture="/Images/Team/barselona.png" }
+            });
+            dataMyTeam.SaveChanges();
+        }
+        private static void SeedTeams(ApplicationDbContext dataTeam)
+        {
+            if (dataTeam.Teams.Any())
+            {
+                return;
+            }
+            dataTeam.Teams.AddRange(new[]
+            {
+                new Team {TeamName="Arsenal",Picture="/Images/Team/arsenal.png"},
+                new Team {TeamName="Juventus",Picture="/Images/Team/uventus.jpg"},
+                new Team {TeamName="RealMadrid",Picture="/Images/Team/real.png"},
+                new Team {TeamName="Sevilla",Picture="/Images/Team/real.png"},
+                new Team {TeamName="BayernMunich",Picture="/Images/Team/real.png"},
+                new Team {TeamName="AtleticoMadrid",Picture="/Images/Team/real.png"},
+
+
+
+            });
+            dataTeam.SaveChanges();
+        }
+
+
     }
 }

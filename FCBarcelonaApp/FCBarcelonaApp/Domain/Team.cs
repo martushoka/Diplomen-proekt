@@ -12,14 +12,8 @@ namespace FCBarcelonaApp.Domain
         [Required]
 
         public string TeamName { get; set; }
-
-        public string Country { get; set; }
-        public string Description { get; set; }
-
         public string Picture { get; set; }
-        public virtual IEnumerable<Player> Players { get; set; } = new List<Player>();
-
-        public virtual IEnumerable<Match> Matches { get; set; } = new List<Match>();
+        public virtual IEnumerable<Game> Games { get; set; } = new List<Game>();
 
 
 

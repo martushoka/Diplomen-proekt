@@ -17,14 +17,11 @@ namespace FCBarcelonaApp.Domain
         public string Picture { get; set; }
         public string Position { get; set; }
 
-       
-
         public string Country { get; set; }
         [Required]
 
-
-        public int TeamId { get; set; }
-        public virtual Team Team { get; set; }
+        public int MyTeamId { get; set; }
+        public virtual MyTeam MyTeam { get; set; }
 
 
     }

@@ -13,9 +13,9 @@ namespace FCBarcelonaApp.Domain
 
         public DateTime OrderDate { get; set; }
 
-        public int MatchId { get; set; }
+        public int GameId { get; set; }
 
-        public virtual Match Match { get; set; }
+        public virtual Game Game { get; set; }
 
         public string UserId { get; set; }
 

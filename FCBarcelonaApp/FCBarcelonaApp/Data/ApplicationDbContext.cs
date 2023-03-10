@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FCBarcelonaApp.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -16,8 +16,9 @@ namespace FCBarcelonaApp.Data
         }
 
         public DbSet<Player> Players { get; set; }
-        public DbSet<Match> Matches { get; set; }
+        public DbSet<Game> Games { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<MyTeam> MyTeams { get; set; }
         public DbSet<Order> Orders { get; set; }
     }
 }
