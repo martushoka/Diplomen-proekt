@@ -9,9 +9,9 @@ namespace FCBarcelonaApp.Abstraction
 {
     public interface IGameService
     {
-        bool Create(string place, DateTime dateOfGame, string description, int myteamId, int teamId, int quantity, decimal price);
+        bool Create(string place, DateTime dateOfGame, int myteamId, int teamId, int quantity, decimal price);
 
-        bool Update(int gameId, string place, DateTime dateOfGame, string description, int myteamId, int teamId, int quantity, decimal price);
+        bool Update(int gameId, string place, DateTime dateOfGame,  int myteamId, int teamId, int quantity, decimal price);
 
         List<Game> GetGames();
 

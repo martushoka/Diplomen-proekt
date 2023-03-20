@@ -14,7 +14,7 @@ namespace FCBarcelonaApp.Domain
         [Required]
 
         public DateTime DateOfGame { get; set; }
-        public string Description { get; set; }
+
 
      
 
@@ -29,7 +29,7 @@ namespace FCBarcelonaApp.Domain
 
         [Range(0,500)]
 
-        public int Quantity { get; set; }
+        public int  Quantity { get; set; }
         [Required]
 
         [Range(0,1000)]

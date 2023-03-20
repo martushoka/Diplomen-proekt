@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FCBarcelonaApp.Models.Game;
 
 namespace FCBarcelonaApp.Data
 {
@@ -20,5 +21,6 @@ namespace FCBarcelonaApp.Data
         public DbSet<Team> Teams { get; set; }
         public DbSet<MyTeam> MyTeams { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<FCBarcelonaApp.Models.Game.GameCreateVM> GameCreateVM { get; set; }
     }
 }

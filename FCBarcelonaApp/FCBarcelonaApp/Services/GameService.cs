@@ -19,7 +19,7 @@ namespace FCBarcelonaApp.Services
             _context = context;
         }
 
-        public bool Create(string place, DateTime dateOfGame, string description, int myteamId, int teamId, int quantity, decimal price)
+        public bool Create(string place, DateTime dateOfGame, int myteamId, int teamId, int quantity, decimal price)
         {
             Game item = new Game
             {
@@ -27,7 +27,10 @@ namespace FCBarcelonaApp.Services
                 DateOfGame = dateOfGame,
                 MyTeam = _context.MyTeams.Find(myteamId),
                 Team = _context.Teams.Find(teamId),
-                Description = description,
+                Quantity=quantity,
+                Price=price
+
+             
 
 
 
@@ -73,7 +76,7 @@ namespace FCBarcelonaApp.Services
             return _context.SaveChanges() != 0;
         }
 
-        public bool Update(int gameId, string place, DateTime dateOfGame, string description, int myteamId, int teamId, int quantity, decimal price)
+        public bool Update(int gameId, string place, DateTime dateOfGame,  int myteamId, int teamId, int quantity, decimal price)
         {
             var game = GetGameById(gameId);
             if (game == default(Game))
@@ -84,7 +87,7 @@ namespace FCBarcelonaApp.Services
 
             game.DateOfGame = dateOfGame;
             game.Place = place;
-            game.Description = description;
+         
             game.TeamId = teamId;
             _context.Update(game);
             return _context.SaveChanges() != 0;

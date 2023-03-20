@@ -44,6 +44,8 @@ namespace FCBarcelonaApp
 
             services.AddControllersWithViews();
 
+            services.AddTransient<IGameService, GameService>();
+
             services.AddTransient<IMyTeamService, MyTeamService>();
             services.AddTransient<ITeamService, TeamService>();
 
