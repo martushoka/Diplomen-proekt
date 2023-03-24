@@ -22,5 +22,7 @@ namespace FCBarcelonaApp.Data
         public DbSet<MyTeam> MyTeams { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<FCBarcelonaApp.Models.Game.GameCreateVM> GameCreateVM { get; set; }
+        public DbSet<FCBarcelonaApp.Models.Game.GameIndexVM> GameIndexVM { get; set; }
+        public DbSet<FCBarcelonaApp.Models.Game.GameEditVM> GameEditVM { get; set; }
     }
 }

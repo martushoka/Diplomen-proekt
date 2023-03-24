@@ -1,4 +1,5 @@
 ﻿using FCBarcelonaApp.Abstraction;
+using FCBarcelonaApp.Domain;
 using FCBarcelonaApp.Models.Game;
 using FCBarcelonaApp.Models.MyTeam;
 using FCBarcelonaApp.Models.Team;
@@ -25,15 +26,56 @@ namespace FCBarcelonaApp.Controllers
             this._teamService = teamService;
         }
         // GET: GameController
-        public ActionResult Index()
+        public ActionResult Index(string searchStringMyTeamName, string searchStringTeamName)
         {
-            return View();
+            List<GameIndexVM> games = _gameService.GetGames(searchStringMyTeamName, searchStringTeamName)
+            .Select(game => new GameIndexVM
+            {
+                Id = game.Id,
+                Place = game.Place,
+                DateOfGame=game.DateOfGame,
+                MyTeamId = game.MyTeamId,
+                MyTeamName=game.MyTeam.MyTeamName,
+                MyTeamPicture=game.MyTeam.Picture,
+                TeamId = game.TeamId,
+                TeamName=game.Team.TeamName,
+                TeamPicture = game.Team.Picture,
+                Quantity = game.Quantity,
+                Price = game.Price,
+
+
+            }).ToList();
+            return this.View(games);
+
         }
+        
 
         // GET: GameController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Game item = _gameService.GetGameById(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            GameDetailsVM game = new GameDetailsVM()
+            {
+                Id = game.Id,
+                Place = game.Place,
+                DateOfGame = game.DateOfGame,
+                MyTeamId = game.MyTeamId,
+                MyTeamName = game.MyTeamName,
+                MyTeamPicture = game.MyTeamPicture,
+                TeamId = game.TeamId,
+                TeamName = game.TeamName,
+                TeamPicture = game.TeamPicture,
+                Quantity = game.Quantity,
+                Price = game.Price,
+
+            };
+            return View(game);
+
+
         }
 
         // GET: GameController/Create
@@ -81,22 +123,60 @@ namespace FCBarcelonaApp.Controllers
         // GET: GameController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Game game = _gameService.GetGameById(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            GameEditVM updatedGame = new GameEditVM()
+            {
+                Id = game.Id,
+                Place = game.Place,
+                DateOfGame = game.DateOfGame,
+                MyTeamId = game.MyTeamId,
+                
+                TeamId = game.TeamId,
+                
+                Quantity = game.Quantity,
+                Price = game.Price,
+            };
+            updatedGame.MyTeams = _myteamService.GetMyTeams()
+              .Select(b => new MyTeamPairVM()
+              {
+                  Id = b.Id,
+                  Name = b.MyTeamName
+              })
+            .ToList();
+            return View(updatedGame);
+            updatedGame.Teams = _teamService.GetTeams()
+              .Select(b => new TeamPairVM()
+              {
+                  Id = b.Id,
+                  Name = b.TeamName
+              })
+            .ToList();
+
+            
         }
 
         // POST: GameController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, GameEditVM game)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                var updated = _gameService.Update(game.Place, game.DateOfGame, game.MyTeamId,
+                    game.TeamId, game.Quantity, game.Price);
+
+                if (updated)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(game);
         }
 
         // GET: GameController/Delete/5

@@ -28,14 +28,14 @@ namespace FCBarcelonaApp.Models.Game
 
 
 
-        [Display(Name = "MyTeam")]
+        
 
         public int MyTeamId { get; set; }
 
         public virtual List<TeamPairVM> Teams { get; set; }
 
 
-        [Display(Name = "Team")]
+        
 
         public int TeamId { get; set; }
         
