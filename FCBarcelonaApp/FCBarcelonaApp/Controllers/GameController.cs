@@ -3,6 +3,7 @@ using FCBarcelonaApp.Domain;
 using FCBarcelonaApp.Models.Game;
 using FCBarcelonaApp.Models.MyTeam;
 using FCBarcelonaApp.Models.Team;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace FCBarcelonaApp.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class GameController : Controller
     {
         private readonly IGameService _gameService;
@@ -26,6 +28,7 @@ namespace FCBarcelonaApp.Controllers
             this._teamService = teamService;
         }
         // GET: GameController
+        [AllowAnonymous]
         public ActionResult Index(string searchStringMyTeamName, string searchStringTeamName)
         {
             List<GameIndexVM> games = _gameService.GetGames(searchStringMyTeamName, searchStringTeamName)
@@ -35,7 +38,7 @@ namespace FCBarcelonaApp.Controllers
                 Place = game.Place,
                 DateOfGame=game.DateOfGame,
                 MyTeamId = game.MyTeamId,
-                MyTeamName=game.MyTeam.MyTeamName,
+                MyTeamName = game.MyTeam.MyTeamName,
                 MyTeamPicture=game.MyTeam.Picture,
                 TeamId = game.TeamId,
                 TeamName=game.Team.TeamName,
@@ -48,17 +51,18 @@ namespace FCBarcelonaApp.Controllers
             return this.View(games);
 
         }
-        
+
 
         // GET: GameController/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
-            Game item = _gameService.GetGameById(id);
-            if (item == null)
+            Game game = _gameService.GetGameById(id);
+            if (game == null)
             {
                 return NotFound();
             }
-            GameDetailsVM game = new GameDetailsVM()
+            GameDetailsVM details = new GameDetailsVM()
             {
                 Id = game.Id,
                 Place = game.Place,
@@ -73,7 +77,7 @@ namespace FCBarcelonaApp.Controllers
                 Price = game.Price,
 
             };
-            return View(game);
+            return View(details);
 
 
         }
@@ -108,8 +112,8 @@ namespace FCBarcelonaApp.Controllers
 
             if (ModelState.IsValid)
             {
-                var createdId = _gameService.Create(game.Place,game.DateOfGame, game.MyTeamId,
-                    game.TeamId, game.Quantity, game.Price);
+                var createdId = _gameService.Create(game.Place,game.DateOfGame, game.MyTeamName,
+                    game.TeamName, game.Quantity, game.Price);
 
                 if (createdId)
                 {
@@ -141,21 +145,23 @@ namespace FCBarcelonaApp.Controllers
                 Quantity = game.Quantity,
                 Price = game.Price,
             };
-            updatedGame.MyTeams = _myteamService.GetMyTeams()
+            updatedGame.MyTeams = _myTeamService.GetMyTeams()
               .Select(b => new MyTeamPairVM()
               {
                   Id = b.Id,
                   Name = b.MyTeamName
               })
-            .ToList();
-            return View(updatedGame);
+              .ToList();
+            
             updatedGame.Teams = _teamService.GetTeams()
-              .Select(b => new TeamPairVM()
+              .Select(c => new TeamPairVM()
               {
-                  Id = b.Id,
-                  Name = b.TeamName
+                  Id = c.Id,
+                  Name = c.TeamName
               })
-            .ToList();
+              .ToList();
+            return View(updatedGame);
+
 
             
         }
@@ -167,7 +173,7 @@ namespace FCBarcelonaApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updated = _gameService.Update(game.Place, game.DateOfGame, game.MyTeamId,
+                var updated = _gameService.Update(game.Id,game.Place, game.DateOfGame, game.MyTeamId,
                     game.TeamId, game.Quantity, game.Price);
 
                 if (updated)
@@ -182,7 +188,29 @@ namespace FCBarcelonaApp.Controllers
         // GET: GameController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Game game = _gameService.GetGameById(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+            GameDeleteVM delete = new GameDeleteVM()
+            {
+                Id = game.Id,
+                Place = game.Place,
+                DateOfGame = game.DateOfGame,
+                MyTeamId = game.MyTeamId,
+                MyTeamName = game.MyTeamName,
+                MyTeamPicture = game.MyTeamPicture,
+                TeamId = game.TeamId,
+                TeamName = game.TeamName,
+                TeamPicture = game.TeamPicture,
+                Quantity = game.Quantity,
+                Price = game.Price,
+
+            };
+            return View(game);
+
+
         }
 
         // POST: GameController/Delete/5
@@ -190,14 +218,21 @@ namespace FCBarcelonaApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
-            try
+            var deleted = _gameService.RemoveById(id);
+
+            if (deleted)
             {
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction("Success");
             }
-            catch
+            else
             {
                 return View();
             }
+        }
+
+        public IActionResult Success()
+        {
+            return View();
         }
     }
 }

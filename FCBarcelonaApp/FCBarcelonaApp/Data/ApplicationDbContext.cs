@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FCBarcelonaApp.Models.Game;
+using FCBarcelonaApp.Models.Order;
 
 namespace FCBarcelonaApp.Data
 {
@@ -24,5 +25,8 @@ namespace FCBarcelonaApp.Data
         public DbSet<FCBarcelonaApp.Models.Game.GameCreateVM> GameCreateVM { get; set; }
         public DbSet<FCBarcelonaApp.Models.Game.GameIndexVM> GameIndexVM { get; set; }
         public DbSet<FCBarcelonaApp.Models.Game.GameEditVM> GameEditVM { get; set; }
+        public DbSet<FCBarcelonaApp.Models.Game.GameDetailsVM> GameDetailsVM { get; set; }
+        public DbSet<FCBarcelonaApp.Models.Game.GameDeleteVM> GameDeleteVM { get; set; }
+        public DbSet<FCBarcelonaApp.Models.Order.OrderConfirmVM> OrderConfirmVM { get; set; }
     }
 }

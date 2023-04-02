@@ -1,17 +1,22 @@
 ﻿@model IEnumerable<FCBarcelonaApp.Models.Game.GameIndexVM>
+@using FCBarcelonaApp.Models.Order
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
+@if ((this.User.Identity.IsAuthenticated) && (this.User.IsInRole("Administrator")))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <form asp-controller="Game" asp-action="Index" method="get">
     <p>
-       Place: <input type="text" name="SearchStringPlace" />
+
         Team: <input type="text" name="SearchStringTeamName" />
 
         <input type="submit" value="Filter" />
@@ -45,47 +50,71 @@
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                <th>
+                    Order
+                </th>
+            }
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Place)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfGame)
-            </td>
-            <td>
-                <img src="@Html.DisplayFor(modelItem=> item.MyTeamPicture)" alt="Image" width="100" />
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Place)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfGame)
+                </td>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem=> item.MyTeamPicture)" alt="Image" width="100" />
 
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MyTeamName)
-            </td>
-            <td>
-                <img src="@Html.DisplayFor(modelItem=> item.TeamPicture)" alt="Image" width="100" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TeamName)
-            </td>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MyTeamName)
+                </td>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem=> item.TeamPicture)" alt="Image" width="100" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeamName)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        @await Html.PartialAsync("_OrderPartialView", new OrderConfirmVM
+                   {
+                       GameId = item.Id
+                   })
+                    </td>
+                }
+
+                <td>
+                    @if ((this.User.Identity.IsAuthenticated) && (this.User.IsInRole("Administrator")))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    }
+
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    @if ((this.User.Identity.IsAuthenticated) && (this.User.IsInRole("Administrator")))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 @section Scripts {
-     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

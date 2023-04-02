@@ -18,22 +18,22 @@ namespace FCBarcelonaApp.Services
         }
 
        
-        public List<Game> GetGameByMyTeams(int teamId)
+        public List<Game> GetGameByMyTeams(int myteamId)
         {
             return _context.Games
-                  .Where(x => x.MyTeamId == teamId)
+                  .Where(x => x.MyTeamId == myteamId)
                  .ToList();
         }
 
-        public MyTeam GetMyTeamById(int teamId)
+        public MyTeam GetMyTeamById(int myteamId)
         {
-            return _context.MyTeams.Find(teamId);
+            return _context.MyTeams.Find(myteamId);
         }
 
         public List<MyTeam> GetMyTeams()
         {
-            List<MyTeam> teams = _context.MyTeams.ToList();
-            return teams;
+            List<MyTeam> myteams = _context.MyTeams.ToList();
+            return myteams;
         }
 
        

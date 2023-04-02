@@ -30,14 +30,14 @@ namespace FCBarcelonaApp.Models.Game
 
         
 
-        public int MyTeamId { get; set; }
+        public int MyTeamName { get; set; }
 
         public virtual List<TeamPairVM> Teams { get; set; }
 
 
         
 
-        public int TeamId { get; set; }
+        public int TeamName { get; set; }
         
         public virtual List<MyTeamPairVM> MyTeams { get; set; }
 
